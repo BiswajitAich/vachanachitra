@@ -2,7 +2,7 @@
 import { NextPage } from 'next';
 import Image from 'next/image';
 import { useState } from "react";
-import RestrictedWords from '../../components/restrictedWords'
+import RestrictedWords from '../../components/RestrictedWords'
 import ImageLoaderAnimation from '../ImageLoaderAnimation/page';
 import style from '../../css/TextToImage.module.css'
 import FrontImage from '../../../public/front-image.webp'
