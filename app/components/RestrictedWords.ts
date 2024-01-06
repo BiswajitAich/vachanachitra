@@ -82,6 +82,7 @@ const RestrictedWords = [
     'Dog collar',
     'Slavegirl',
     'Transparent and Translucent',
+    'Trans',
 
     // Banned: Body Parts Words
     'Arse',
@@ -164,7 +165,8 @@ const RestrictedWords = [
     'Crack',
     'Torture',
     'Disturbing',
-    'Farts', , 'Fart',
+    'Farts',
+    'Fart',
     'Poop',
     'Warts',
     'Xi Jinping',
