@@ -96,6 +96,8 @@ const RestrictedWords = [
     'Big Ass',
     'Mommy',
     'Booba',
+    'Boob',
+    'Boobs',
     'Nipple',
     'Booty',
     'Oppai',
@@ -194,7 +196,7 @@ const RestrictedWords = [
     '1488',
     'Surgery',
     'sex',
-    'sex doll',
+    'sex doll'
 
 ];
 
