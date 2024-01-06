@@ -24,7 +24,7 @@ const TextToImage: NextPage = () => {
       try {
 
         const response = await fetch(
-          "https://api-inference.huggingface.co/models/Lykon/dreamshaper-xl-turbo",
+          `https://api-inference.huggingface.co/models/${process.env.NEXT_PUBLIC_TEXT_TO_IMAGE_GENERATOR_ENDPOINT}`,
           {
             method: "POST",
             headers: {
@@ -55,11 +55,20 @@ const TextToImage: NextPage = () => {
 
     if (foundRestrictedWords.length > 0) {
       setRestrictedWordsUsed(true);
-      setTimeout(() => {
+
+
+      const intervalId = setInterval(() => {
         setRestrictedWordsUsed(false);
       }, 5000);
+
+
+
       setLoading(false);
-      setInput('');
+      // setInput('');
+
+      setTimeout(() => {
+        clearInterval(intervalId);
+      }, 5000);
 
     } else {
       fetchTextToImageData();
@@ -77,21 +86,32 @@ const TextToImage: NextPage = () => {
       setTimeout(() => {
         clearInterval(intervalId);
       }, 60000);
+
+      setShow(true);
+
     }
 
   };
 
+  const inputHasAtLeastThreeWords = () => {
+    const words = input.trim().split(/\s+/);
+    return words.length >= 3;
+  };
+  
+
   const handleInput = () => {
     // e.preventDefault();
-    setLoading(true);
-    setShow(true);
-    containsRestrictedWords();
+
+    if (inputHasAtLeastThreeWords()) {
+      setLoading(true);
+      containsRestrictedWords();
+    }
   };
 
   const handleKeyPress = (e: { key: string; }) => {
     if (e.key === 'Enter') {
       handleInput();
-      
+
     }
   };
 
@@ -113,47 +133,47 @@ const TextToImage: NextPage = () => {
     <div className={style.bodyContainer}>
       <h2>Text to Image Generator</h2>
       {restrictedWordsUsed ? (
-        <p>Sorry but You are using restricted words!</p>
-      ) : (
+        <p className={style.restrictedWordsUsedNotice}>Sorry but You are using restricted words!</p>
+      ) : null}
+
+      {show ? (
         <>
-          {show ? (
-            <>
-              {!loading ? (<>
-                <Image src={promptData}
-                  height={250}
-                  width={250}
-                  alt="Result not loaded"
-                  className={style.promptDataImage}
-                  loading='eager' />
-                <button onClick={handleDownload}  disabled={!promptData} className={style.download}>
-                  Download Image <span>{"\u2B07"}</span>
-                </button>
-              </>
-              ) : (
-                <ImageLoaderAnimation />
-              )}
-            </>
-          ) : <Image
-            src={FrontImage}
-            height={250}
-            width={250}
-            alt='Image'
-            loading='eager'
-            priority={true}
-          />}
-          <div className={style.inputAndBtn}>
-            <input type="text"
-              onChange={(e) => setInput(e.target.value)}
-              placeholder='Enter a creative prompt here...'
-              onKeyDown={handleKeyPress} 
-              />
-            <button type="submit" onClick={handleInput} disabled={disable} >
-              Enter
+          {!loading ? (<>
+            <Image src={promptData}
+              height={250}
+              width={250}
+              alt="Result not loaded"
+              className={style.promptDataImage}
+              loading='eager' />
+            <button onClick={handleDownload} disabled={!promptData} className={style.download}>
+              Download Image <span>{"\u2B07"}</span>
             </button>
-            {disable ? <p>{`Time left: ${timeLeft} seconds`}</p> : null}
-          </div>
+          </>
+          ) : (
+            <ImageLoaderAnimation />
+          )}
         </>
-      )}
+      ) : <Image
+        src={FrontImage}
+        height={250}
+        width={250}
+        alt='Image'
+        loading='eager'
+        priority={true}
+      />}
+      <div className={style.inputAndBtn}>
+        <input type="text"
+          onChange={(e) => setInput(e.target.value)}
+          placeholder='Enter a creative prompt here...'
+          onKeyDown={handleKeyPress}
+        />
+        <button type="submit" onClick={handleInput} disabled={disable} >
+          Enter
+        </button>
+        {disable ? <p>{`Time left: ${timeLeft} seconds`}</p> : null}
+      </div>
+
+
       {createdImage ? (<>
         <p>Generated Images</p>
         <div className={style.createdImageDisplay}>
