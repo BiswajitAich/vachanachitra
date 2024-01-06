@@ -193,6 +193,8 @@ const RestrictedWords = [
     'Succubus',
     '1488',
     'Surgery',
+    'sex',
+    'sex doll',
 
 ];
 
